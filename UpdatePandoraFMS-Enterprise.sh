@@ -6,14 +6,16 @@
 echo 'Instalando Dependencias Enterprise'
 yum -y install fping
 
-echo 'Actualizando Consola WEB...'
+echo 'Descargando paquetes...'
 cd rpms
-yum install -y ./pandorafms_console_enterprise-7.0NG.747.noarch.rpm
+
+./GetEnterprise
+
+echo 'Actualizando Consola WEB...'
+yum install -y ./pandorafms_console_enterprise.noarch.rpm
 echo 'Actualizando Servidor Pandora a Enterprise...'
 
-wget https://itsanchez.com.ar/sitsmon/pandorafms_server_enterprise-7.0NG.747_x86_64.tar.gz --no-check-certificate
-
-tar xvzf ./pandorafms_server_enterprise-7.0NG.747_x86_64.tar.gz
+tar xvzf ./pandorafms_server_enterprise.tar.gz
 
 cd pandora_server
 ./pandora_server_installer --install
