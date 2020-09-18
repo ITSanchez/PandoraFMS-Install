@@ -32,7 +32,7 @@ echo 'Instalando dependencias....'
 yum -y install mariadb-server httpd mod_php mod_ssl php-gd php-mysql php-mbstring xorg-x11-fonts-misc graphviz php-snmp php-pear php-ldap php-pear-DB xorg-x11-fonts-75dpi graphviz
 yum -y install php php-gd graphviz php-mysql php-pear-DB php-zip php-mbstring php-ldap php-snmp php-ldap php-common make perl-CPAN perl-HTML-Tree perl-DBI perl-DBD-mysql perl-libwww-perl perl-XML-Simple perl-XML-Twig perl-XML-SAX perl-NetAddr-IP net-snmp perl-SNMP net-tools perl-IO-Socket-INET6 perl-Socket6 nmap sudo xprobe2 perl-Encode-Locale php-xmlrpc libxslt php-xml
 yum -y install net-snmp-perl perl-JSON perl-NetAddr-IP perl-Socket6 perl-Time-HiRes perl-XML-Twig perl-IO-Socket-INET6
-yum -y install php php-common graphviz
+yum -y install php php-common graphviz php-fpm
 yum -y install perl-HTML-Tree perl-DBD-mysql perl-XML-Simple perl-XML-SAX perl-NetAddr-IP net-snmp perl-SNMP net-tools perl-IO-Socket-INET6 perl-Socket6 nmap
 yum -y install snmp snmpd libtime-format-perl libxml-simple-perl libxml-twig-perl libdbi-perl libnetaddr-ip-perl libhtml-parser-perl wmi-client xprobe2 nmap libmail-sendmail-perl traceroute 
 yum -y install libio-socket-inet6-perl libhtml-tree-perl libsnmp-perl snmp-mibs-downloader libio-socket-multicast-perl libsnmp-perl libjson-per 
@@ -44,6 +44,8 @@ systemctl enable mariadb
 echo 'Configurando apache (httpd)'
 systemctl enable httpd
 systemctl start httpd
+systemctl enable php-fpm
+systemctl start php-fpm
 
 echo 'Cargando Repositorio Pandora FMS'
 cat <<EOF > /etc/yum.repos.d/PandoraFMS.repo
@@ -58,6 +60,11 @@ yum -y install pandorafms_console pandorafms_server
 
 echo 'reiniciando apache'
 systemctl restart httpd
+
+echo 'Creando base de datos inicial'
+cd rpms
+tar xvzf ./pandora_db.tgz
+mysql -u root -ppandora pandora < pandora.sql
 
 echo 'termine la instalacion desde el navegador'
 ip=$(hostname -I|sed "s/ //g")

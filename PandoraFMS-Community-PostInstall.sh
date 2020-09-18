@@ -26,6 +26,14 @@ cp /opt/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/bin/
 
 echo 'Seteando Password usuario pandora'
 mysql -u root -ppandora -e "SET PASSWORD FOR pandora@localhost = PASSWORD('pandora')";
+
+echo 'Ajustando php.ini'
+# Prepare php.ini
+sed -i -e "s/^max_input_time.*/max_input_time = -1/g" /etc/php.ini
+sed -i -e "s/^max_execution_time.*/max_execution_time = 0/g" /etc/php.ini
+sed -i -e "s/^upload_max_filesize.*/upload_max_filesize = 800M/g" /etc/php.ini
+sed -i -e "s/^memory_limit.*/memory_limit = 500M/g" /etc/php.ini
+
 echo 'Configurando Pandora Server'
 systemctl enable pandora_server
 systemctl start pandora_server
