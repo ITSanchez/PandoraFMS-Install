@@ -39,6 +39,7 @@ yum -y install libio-socket-inet6-perl libhtml-tree-perl libsnmp-perl snmp-mibs-
 echo 'Configurando password root mysql... la misma es: pandora'
 echo 'Configurando mariadb (mysql)'
 systemctl start mariadb
+mysql -u root -e "CREATE DATABASE pandora";
 mysql -u root -e "SET PASSWORD FOR root@localhost = PASSWORD('pandora')";
 systemctl enable mariadb
 echo 'Configurando apache (httpd)'
@@ -65,6 +66,12 @@ echo 'Creando base de datos inicial'
 cd rpms
 tar xvzf ./pandora_db.tgz
 mysql -u root -ppandora pandora < pandora.sql
+
+cd ..
+echo 'Copiando archivos'
+\cp ./php/config.php /var/www/html/pandora_console/include/
+chown apache.apache /var/www/html/pandora_console/include/config.php
+#rm -f /var/www/html/pandora_console/install.php
 
 echo 'termine la instalacion desde el navegador'
 ip=$(hostname -I|sed "s/ //g")
