@@ -22,6 +22,6 @@ cd pandora_server
 cd ..
 \cp ./pandora_server.conf /etc/pandora/
 echo 'Reinciando Servicios'
+systemctl daemon-reload
 systemctl restart httpd
 systemctl restart pandora_server
-
